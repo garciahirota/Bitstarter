@@ -1,0 +1,89 @@
+<%@ Page Title="" Language="C#" MasterPageFile="~/Norma/NormaMaster.master" AutoEventWireup="true" CodeBehind="AdministracionDescuentos.aspx.cs" Inherits="Alcance.RH.Website.Norma.AdministracionDescuentos" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolderTitle" runat="server">
+    Descuentos del personal
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolderHead" runat="server">
+    <link href="/Styles/TableStyle.css" rel="stylesheet" type="text/css" />
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolderContenido" runat="server">
+<fieldset>                         
+    <h2 style="margin-top:4px; margin-bottom:4px; font-weight:normal">
+        Descuentos del personal.
+    </h2>
+    <table width="100%" >
+        <tr>
+            <td style="width:240px; vertical-align:top ; padding-top:15px;">
+                <telerik:RadGrid ID="gridPeriodos" runat="server" AutoGenerateColumns="False" Width="240" 
+                                OnNeedDataSource="gridPeriodos_NeedDataSource" OnItemCommand="gridPeriodos_Command" CellSpacing="0" GridLines="None" >
+                    <MasterTableView DataKeyNames="Id">
+                        <NoRecordsTemplate>
+                            <div>
+                                No hay periodos cargados
+                            </div>
+                        </NoRecordsTemplate>
+                        <Columns>
+                            <telerik:GridBoundColumn DataField="Id" HeaderText="ID" ReadOnly="true"
+                                ForceExtractValue="Always" ConvertEmptyStringToNull="true" Visible="false" />
+                                <telerik:GridTemplateColumn >
+                                    <ItemTemplate>
+                                        <telerik:RadButton ID="btnAbrirPeriodo" runat="server" Text="Editar" CommandName="Editar" CausesValidation="false" >
+                                            <Icon PrimaryIconCssClass="rbEdit" PrimaryIconLeft="4" PrimaryIconTop="4" />
+                                        </telerik:RadButton>
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
+                            <telerik:GridBoundColumn DataField="Clave" HeaderText="Periodo" >
+                            </telerik:GridBoundColumn>
+                        </Columns>  
+                    </MasterTableView>
+                </telerik:RadGrid>
+            </td>
+            <td style="vertical-align:top">
+                <fieldset>
+                    <div id="DivPeriodoVacio" runat="server" visible="false">
+                        <h2 style="margin-top:4px; margin-bottom:4px; font-weight:normal">
+                            Seleccione un periodo del panel izquiedo, al cual se procesará la información.
+                        </h2>
+                    </div>
+                    <div id="DivPeriodoInformado" runat="server" visible="false">
+                        <h3 style="margin-top:4px; margin-bottom:4px; font-weight:normal">
+                           Periodo seleccionado: <b> <asp:Label ID="lblPeriodo" runat="server"></asp:Label>.</b>
+                        </h3>
+                        <br />
+                        Sucursal: <telerik:RadComboBox runat="server" Width="200px" ZIndex="100000" AutoPostBack="true" DataTextField="Nombre" DataValueField="Id" AllowCustomText="false" Filter="StartsWith" ID="cbxSucursales" EmptyMessage="Seleccione una sucursal..." OnSelectedIndexChanged="cbxSucursales_Changed" ></telerik:RadComboBox>
+                        <br />
+                        <%if (empleados != null)
+                          { %>
+                            <h3>Empleados registrados:</h3>
+                            <table id="rounded-corner3">
+                            <%
+                              int ind = 1;
+                              foreach (Alcance.RH.Mina.Servicios.DTO.EmpleadoDTO empleado in empleados)
+                              {
+                                  ind++;
+                                  if (ind % 2 == 0)
+                                  { 
+                                  %>
+                                  <tr class="odd">
+                                    <td>
+                                        <%=empleado.NombreCompleto%>
+                                    </td>
+                                  </tr>
+                            <%}
+                              else
+                              {%>
+                                  <tr>
+                                    <td>
+                                        <%=empleado.NombreCompleto%>
+                                    </td>
+                                  </tr>
+                              <%}
+                                }%>
+                            </table>
+                          <%}%>
+                    </div>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+</asp:Content>
